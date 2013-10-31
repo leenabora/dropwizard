@@ -1,7 +1,7 @@
 package uk.co.o2.stockservice.resources
 
-import uk.co.o2.stockservice.model.StockSummary
 import uk.co.o2.stockservice.configuration.PropertyConfigurator
+import uk.co.o2.stockservice.model.StockSummary
 
 import javax.ws.rs.*
 import javax.ws.rs.core.Response

@@ -1,4 +1,7 @@
 #!/bin/bash -e
+
 gradle fatJar
-cd dev/build/libs
-java -jar dev-fat.jar server
+
+cd stockservice-service/build/libs
+
+java -jar stockservice-service-fat.jar server

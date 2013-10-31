@@ -1,0 +1,55 @@
+apply plugin: "groovy"
+apply plugin: 'application'
+apply plugin: 'fatjar'
+
+jar.enabled = true
+
+
+// The main class of the application
+mainClassName = 'uk.co.o2.stockservice.StockServiceBootStrap'
+
+
+dependencies {
+    compile groovy
+
+    compile dropWizard, jbossLogging, jerseyClient
+
+    compile servicesCommon, servicesTestCommon, servicesSchemasCommon
+
+    compile project(':stockservice-api')
+
+}
+
+
+compileJava.options.encoding = "ASCII"
+compileTestJava.options.encoding = "ASCII"
+compileGroovy.options.encoding = "ASCII"
+compileTestGroovy.options.encoding = "ASCII"
+
+compileGroovy.groovyOptions.fork(memoryMaximumSize: '1024m')
+compileTestGroovy.groovyOptions.fork(memoryMaximumSize: '1024m')
+
+
+
+// Set our project variables
+project.ext {
+    dropwizardVersion = '0.6.2'
+    dropWizardConfig = 'stockservice-service/src/main/groovy/resources/stockService.yml'
+}
+
+// Configure the fatJar task
+fatJar {
+    classifier 'fat'
+
+    // We need to add the main class to the manifest, otherwise the JAR won't start.
+    manifest {
+        attributes 'Main-Class': mainClassName
+    }
+
+    // We have to exclude signature files from the fat JAR, otherwise we'll get invalid signature file digest errors.
+    exclude 'META-INF/*.DSA', 'META-INF/*.RSA', 'META-INF/*.SF'
+}
+
+
+task stage(dependsOn: ['clean', 'fatJar'])
+

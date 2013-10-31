@@ -2,7 +2,6 @@ package uk.co.o2.stockservice.resources.admin
 
 import uk.co.o2.services.serialization.InputSchema
 
-import javax.annotation.Resource
 import javax.ws.rs.*
 import javax.ws.rs.core.MediaType
 import javax.ws.rs.core.Response

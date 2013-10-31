@@ -1,0 +1,10 @@
+# HTTP-specific options.
+http:
+
+  port: 4685
+
+  adminPort: 4686
+
+  rootPath: "/stockService"
+
+  contextParameters: {}

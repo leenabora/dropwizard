@@ -1,1 +1,2 @@
-include "dev"
+include "stockservice-api"
+include "stockservice-service"

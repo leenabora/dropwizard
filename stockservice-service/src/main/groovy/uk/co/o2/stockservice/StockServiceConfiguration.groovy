@@ -1,4 +1,4 @@
-package uk.co.o2.stockservice.configuration
+package uk.co.o2.stockservice
 
 import com.yammer.dropwizard.config.Configuration
 

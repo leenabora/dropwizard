@@ -42,7 +42,34 @@ idea.workspace.iws {
         }
     }
 }
-project(':dev') {
+project(':stockservice-api') {
+    idea.module.iml {
+        withXml { provider ->
+            def facetManagerNode = provider.node.appendNode('component', [name: 'FacetManager'])
+            def springNode = facetManagerNode.appendNode('facet', [type: 'Spring', name: 'Spring'])
+            def springConfigurationNode = springNode.appendNode('uk.co.o2.stockservice.configuration')
+            def filesetNode = springConfigurationNode.appendNode('fileset', [id: "fileset", name: 'Spring Application Context', removed: 'false'])
+
+            fileTree("src/main/webapp/WEB-INF/").include("**/*.xml").each {
+                filesetNode.appendNode('file', "file://\$MODULE_DIR\$/src/main/webapp/WEB-INF/${it.name}")
+            }
+
+            def webNode = facetManagerNode.appendNode('facet', [type: 'web', name: 'Web'])
+            def webConfigurationNode = webNode.appendNode('uk.co.o2.stockservice.configuration')
+
+            def descriptorsNode = webConfigurationNode.appendNode('descriptors')
+            descriptorsNode.appendNode('deploymentDescriptor', [name: "web.xml", url: 'file://$MODULE_DIR$/src/main/webapp/WEB-INF/web.xml'])
+
+            def webRootsNode = webConfigurationNode.appendNode('webroots')
+            webRootsNode.appendNode('root', [url: 'file://$MODULE_DIR$/src/main/webapp', relative: "/"])
+
+            def sourceRootsNode = webConfigurationNode.appendNode('sourceRoots')
+            sourceRootsNode.appendNode('root', [url: 'file://$MODULE_DIR$/src/main/resources'])
+            sourceRootsNode.appendNode('root', [url: 'file://$MODULE_DIR$/src/main/groovy'])
+        }
+    }
+}
+project(':stockservice-service') {
     idea.module.iml {
         withXml { provider ->
             def facetManagerNode = provider.node.appendNode('component', [name: 'FacetManager'])

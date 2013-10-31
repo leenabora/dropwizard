@@ -1,0 +1,23 @@
+apply plugin: "groovy"
+apply plugin: 'application'
+
+jar.enabled = true
+apply from: rootProject.file("compiler-settings.gradle")
+
+
+dependencies {
+    compile groovy
+
+    compile dropWizard, jbossLogging, jerseyClient
+
+    compile servicesCommon, servicesTestCommon, servicesSchemasCommon
+}
+
+
+compileJava.options.encoding = "ASCII"
+compileTestJava.options.encoding = "ASCII"
+compileGroovy.options.encoding = "ASCII"
+compileTestGroovy.options.encoding = "ASCII"
+
+compileGroovy.groovyOptions.fork(memoryMaximumSize: '1024m')
+compileTestGroovy.groovyOptions.fork(memoryMaximumSize: '1024m')

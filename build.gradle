@@ -3,10 +3,13 @@ apply plugin: "base"
 apply from: "ide-support.gradle"
 apply from: "external-dependencies.gradle"
 
+apply from: rootProject.file("compiler-settings.gradle")
+
 /*
   Set by hudson during a CI build
 */
 def svnRevision = System.getenv("SVN_REVISION") ?: "not-built-from-CI"
+
 
 allprojects {
     ext {
@@ -16,6 +19,9 @@ allprojects {
         // http://jira.codehaus.org/browse/GRADLE-1329
         sourceCompatibility = JavaVersion.VERSION_1_6
         targetCompatibility = JavaVersion.VERSION_1_6
+
+        dropwizardVersion = '0.6.2'
+        dropWizardConfig = 'stockservice-service/src/main/groovy/resources/stockService.yml'
     }
 
     repositories {
@@ -49,3 +55,15 @@ buildscript {
         classpath 'eu.appsatori:gradle-fatjar-plugin:0.2-rc1'
     }
 }
+
+
+
+
+// Configure the run task to start the Dropwizard service
+/*
+run {
+    args 'server', dropWizardConfig
+}
+*/
+
+

@@ -1,4 +1,4 @@
-package uk.co.o2.stockservice.configuration
+package uk.co.o2.stockservice
 
 import com.fasterxml.jackson.core.JsonFactory
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -7,6 +7,9 @@ import com.yammer.dropwizard.config.Bootstrap
 import com.yammer.dropwizard.config.Environment
 import uk.co.o2.json.schema.SchemaPassThroughCache
 import uk.co.o2.services.serialization.JacksonJsonSchemaValidatingProvider
+import StockResource
+import AdminDeliveryOptionsResource
+import AdminStockResource
 import uk.co.o2.stockservice.resources.StockResource
 import uk.co.o2.stockservice.resources.admin.AdminDeliveryOptionsResource
 import uk.co.o2.stockservice.resources.admin.AdminStockResource
@@ -24,6 +27,9 @@ class StockServiceBootStrap extends Service<StockServiceConfiguration> {
     @Override
     public void run(StockServiceConfiguration configuration,
                     Environment environment) {
+
+        environment.setJerseyProperty("rootPath","stockService")
+
         registerProvider(environment)
 
         registerResources(environment)
