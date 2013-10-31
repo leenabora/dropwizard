@@ -1,0 +1,7 @@
+import org.gradle.api.tasks.compile.AbstractCompile
+import org.gradle.api.tasks.compile.Compile
+
+//force ASCII encoding for all compile tasks
+tasks.matching { it instanceof AbstractCompile }.each { //all compile tasks extend AbstractCompile
+    it.options.encoding = "ASCII"
+}

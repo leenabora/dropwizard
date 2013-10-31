@@ -1,0 +1,51 @@
+apply plugin: "base"
+
+apply from: "ide-support.gradle"
+apply from: "external-dependencies.gradle"
+
+/*
+  Set by hudson during a CI build
+*/
+def svnRevision = System.getenv("SVN_REVISION") ?: "not-built-from-CI"
+
+allprojects {
+    ext {
+        groupId = "uk.co.o2.oatc"
+        version = svnRevision
+
+        // http://jira.codehaus.org/browse/GRADLE-1329
+        sourceCompatibility = JavaVersion.VERSION_1_6
+        targetCompatibility = JavaVersion.VERSION_1_6
+    }
+
+    repositories {
+        def buildEnv = System.getenv('BUILD_ENV')
+
+        if (buildEnv != "JENKINS") {
+            mavenLocal()
+        }
+
+        if (buildEnv == "CTS") {
+            maven { url "http://14.140.122.139:9080/nexus/content/groups/public" }
+        } else {
+            maven { url "http://deneb.dev.o2.co.uk:8081/nexus/content/groups/public" }
+        }
+        mavenCentral()
+    }
+
+    configurations.all {
+        resolutionStrategy.cacheChangingModulesFor 0, 'minutes'
+    }
+
+}
+
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath 'eu.appsatori:gradle-fatjar-plugin:0.2-rc1'
+    }
+}

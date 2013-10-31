@@ -1,0 +1,91 @@
+allprojects {
+    apply plugin: 'idea'
+}
+
+//Prevent the resulting .ipr file from containing a module for the root project.
+idea.project.modules.remove(project.idea.module)
+
+project.idea.module {
+    excludeDirs += ['file://$MODULE_DIR$/buildSrc', 'file://$MODULE_DIR$/dependencies']
+}
+
+idea.project.ipr {
+    withXml { provider ->
+        provider.node.component.find { it.@name == 'VcsDirectoryMappings' }.mapping.@vcs = 'Git'
+    }
+}
+
+idea.workspace.iws {
+    withXml { provider ->
+        def runManagerComponent = provider.node.component.find { it.'@name' == 'RunManager'}
+
+        configureJUnit(runManagerComponent)
+        configureTestNG(runManagerComponent)
+    }
+
+    withXml { provider ->
+        def groovyCompilerConfigurationComponent = provider.node.find { it.'@name' == 'GroovyCompilerConfiguration' } ?: provider.node.appendNode('component', [name: 'GroovyCompilerConfiguration'])
+        groovyCompilerConfigurationComponent.findAll { it.name() == 'excludes' }.each { groovyCompilerConfigurationComponent.remove(it) }
+        def excludes = groovyCompilerConfigurationComponent.appendNode('excludes')
+
+        project.rootProject.allprojects.findAll{ it.plugins.hasPlugin("groovy") }. each { groovyProject ->
+            def appendNodeIfPresent = { String path ->
+                String projectPath = groovyProject.path.replace(":", "/")
+
+                if (groovyProject.file(path).exists()) {
+                    excludes.appendNode("directory", [url: "file://\$PROJECT_DIR\$${projectPath}/${path}", includeSubdirectories: true])
+                }
+            }
+
+            appendNodeIfPresent("src/main/groovy")
+            appendNodeIfPresent("src/test/groovy")
+        }
+    }
+}
+project(':dev') {
+    idea.module.iml {
+        withXml { provider ->
+            def facetManagerNode = provider.node.appendNode('component', [name: 'FacetManager'])
+            def springNode = facetManagerNode.appendNode('facet', [type: 'Spring', name: 'Spring'])
+            def springConfigurationNode = springNode.appendNode('uk.co.o2.stockservice.configuration')
+            def filesetNode = springConfigurationNode.appendNode('fileset', [id: "fileset", name: 'Spring Application Context', removed: 'false'])
+
+            fileTree("src/main/webapp/WEB-INF/").include("**/*.xml").each {
+                filesetNode.appendNode('file', "file://\$MODULE_DIR\$/src/main/webapp/WEB-INF/${it.name}")
+            }
+
+            def webNode = facetManagerNode.appendNode('facet', [type: 'web', name: 'Web'])
+            def webConfigurationNode = webNode.appendNode('uk.co.o2.stockservice.configuration')
+
+            def descriptorsNode = webConfigurationNode.appendNode('descriptors')
+            descriptorsNode.appendNode('deploymentDescriptor', [name: "web.xml", url: 'file://$MODULE_DIR$/src/main/webapp/WEB-INF/web.xml'])
+
+            def webRootsNode = webConfigurationNode.appendNode('webroots')
+            webRootsNode.appendNode('root', [url: 'file://$MODULE_DIR$/src/main/webapp', relative: "/"])
+
+            def sourceRootsNode = webConfigurationNode.appendNode('sourceRoots')
+            sourceRootsNode.appendNode('root', [url: 'file://$MODULE_DIR$/src/main/resources'])
+            sourceRootsNode.appendNode('root', [url: 'file://$MODULE_DIR$/src/main/groovy'])
+        }
+    }
+}
+
+private void configureJUnit(runManagerComponent) {
+    def defaultJunitConfig = runManagerComponent.configuration.find { (it.'@default' == 'true') && (it.'@type' == 'JUnit') }
+    defaultJunitConfig.option.find { it.'@name' == 'WORKING_DIRECTORY' }.'@value' = '$MODULE_DIR$'
+
+    if (System.getenv('JAVA_OPTS')) {
+        defaultJunitConfig.option.find { it.'@name' == 'VM_PARAMETERS' }.'@value' = System.getenv('JAVA_OPTS') + " -Dcatalina.base=${System.properties['catalina.base']}"
+    } else {
+        println("**** JAVA_OPTS not set *****")
+        println("Consider adding \"JAVA_OPTS='-Xms2048m -Xrs -XX:MaxPermSize=512m'\" to /etc/environment.")
+        sleep(5000)
+    }
+
+    defaultJunitConfig.envs[0].appendNode("env", [name: "OATC_ENV", value: System.getenv('OATC_ENV')])
+}
+
+private void configureTestNG(runManagerComponent) {
+    def defaultTestNGConfig = runManagerComponent.appendNode('uk.co.o2.stockservice.configuration', [default: 'true', type: 'TestNG', factoryName: 'TestNG'])
+    defaultTestNGConfig.appendNode('option', [name: 'WORKING_DIRECTORY', value: '$MODULE_DIR$'])
+}
