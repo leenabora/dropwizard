@@ -1,0 +1,43 @@
+{
+    "type": "object",
+    "required": true,
+    "additionalProperties": false,
+    "properties": {
+
+          "sku": { "type": "string", "required": true,  "maxLength": 50 , "pattern": "\\s*\\S.*"},
+
+          "channel" : {
+                "type" : "string",
+                "required" : true,
+
+                "enumeration" : [ "CFA", "CFU","AFU", "AFA" ]
+           },
+
+         "allocationPerStockStatus": {
+                "type": "array",
+                "required": true,
+
+                "items": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "properties": {
+
+                           "stockStatus": {
+                                "type" : "string",
+                                "required" : true,
+
+                	        "enumeration" : [  "PreOrder", "BackOrder", "InStock", "DelayedDelivery", "OutOfStock" ]
+                            },
+
+                           "stockLevel": {  "type" : "integer", "required" : true },
+
+                           "stockMessage": { "$ref": "shared/non-empty-string.json",  "required": false  },
+
+                           "stockExtendedMessage": { "$ref": "shared/non-empty-string.json",  "required": false  }
+
+                      }
+                 }
+           }
+
+    }
+}

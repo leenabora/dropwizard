@@ -1,0 +1,17 @@
+{
+    "type" : "object",
+    "required" : true,
+    "additionalProperties" : false,
+    "properties" : {
+
+         "sku": { "type": "string", "required": true,  "maxLength": 50 , "pattern": "\\s*\\S.*"},
+
+         "allocationPerChannel": {
+                     "type" : "array",
+                     "required" : true,
+                     "additionalItems" : false,
+
+                      "items" : { "$ref": "stock-allocation-per-channel-schema.json", "required" : true }
+                }
+      }
+}
