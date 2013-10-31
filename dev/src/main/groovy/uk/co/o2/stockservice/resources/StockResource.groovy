@@ -1,6 +1,7 @@
 package uk.co.o2.stockservice.resources
 
 import uk.co.o2.stockservice.model.StockSummary
+import uk.co.o2.stockservice.configuration.PropertyConfigurator
 
 import javax.ws.rs.*
 import javax.ws.rs.core.Response
@@ -16,6 +17,19 @@ class StockResource {
 
     @GET
     public Response getStockSummary(@PathParam("sku") String sku, @QueryParam("channel") String channel) {
+        def prop = new PropertyConfigurator()
+        println(prop.getValue("name"))
+
+        def prop1 = new PropertyConfigurator()
+        println(prop1.getValue("name"))
+
+        def prop2 = new PropertyConfigurator()
+        println(prop2.getValue("name"))
+
+        def prop3 = new PropertyConfigurator()
+        println(prop3.getValue("name"))
+
+
         if (sku == "sku-123") {
             StockSummary stockSummary = new StockSummary(1, sku, channel, "PreOrder", 500);
             status(OK).type(APPLICATION_JSON).entity(stockSummary).build()
