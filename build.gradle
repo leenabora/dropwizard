@@ -55,15 +55,3 @@ buildscript {
         classpath 'eu.appsatori:gradle-fatjar-plugin:0.2-rc1'
     }
 }
-
-
-
-
-// Configure the run task to start the Dropwizard service
-/*
-run {
-    args 'server', dropWizardConfig
-}
-*/
-
-

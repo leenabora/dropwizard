@@ -1,6 +1,7 @@
 package uk.co.o2.stockservice.resources.admin
 
 import uk.co.o2.services.serialization.InputSchema
+import uk.co.o2.stockservice.service.StockService
 
 import javax.ws.rs.Consumes
 import javax.ws.rs.POST
@@ -13,14 +14,20 @@ import static javax.ws.rs.core.MediaType.APPLICATION_JSON
 import static javax.ws.rs.core.Response.Status.CREATED
 import static javax.ws.rs.core.Response.status
 
-@Path("/admin/deliveryOptions/")
+@Path("/admin/stockMetadata/")
 @Produces(APPLICATION_JSON)
-class AdminDeliveryOptionsResource {
+class AdminStockMetadataResource {
+
+    private StockService stockService
+
+    AdminStockMetadataResource(StockService stockService) {
+        this.stockService = stockService
+    }
 
     @POST
     @Consumes(APPLICATION_JSON)
-    public Response saveDeliveryOptions(@InputSchema("admin_schemas/deliveryoptions-messages-for-stockstatus-schema.json") Map map) {
-        status(CREATED).type(APPLICATION_JSON).entity("{'message': 'successfully saved delivery options'}").build()
+    public Response saveMetadata(@InputSchema("admin_schemas/stock-metadata-schema.json") Map map) {
+        status(CREATED).type(APPLICATION_JSON).entity("{'message': 'successfully saved delivery options and stock mesages'}").build()
     }
 
 }

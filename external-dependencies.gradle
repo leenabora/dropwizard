@@ -14,4 +14,7 @@ ext {
     servicesTestCommon = "uk.co.o2.services:test-common:1.1-SNAPSHOT"
 
     servicesSchemasCommon = "uk.co.o2.services:schemas:1.0-SNAPSHOT"
+
+    mongoJack = 'org.mongojack:mongojack:2.0.0-RC5'
+
 }

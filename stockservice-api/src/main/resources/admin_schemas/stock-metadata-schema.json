@@ -1,0 +1,36 @@
+{
+    "type" : "array",
+    "required" : true,
+    "additionalProperties" : false,
+
+    "items" : {
+                  "type" : "object",
+                  "required" : true,
+                  "additionalProperties" : false,
+                  "properties" : {
+
+                          "stockStatus" : {
+                               "type" : "string",
+                               "required" : true,
+                               "enumeration" : [  "PreOrder", "BackOrder", "InStock", "DelayedDelivery", "OutOfStock" ]
+                          },
+
+                          "supportedDeliveryOptions": {
+                                "type": "object",
+                                "required": true,
+                                "additionalProperties": false,
+                                "properties": {
+
+                                     "Scheduled" : {"type" : "boolean", "required" : true},
+                                     "Unscheduled": {"type" : "boolean", "required" : true},
+                                     "ClickAndCollect"  : {"type" : "boolean", "required" : true}
+
+                                 }
+                           },
+
+                      "stockMessage": { "$ref": "../shared-schemas/non-empty-string.json",  "required": true  },
+
+                       "stockExtendedMessage": { "$ref": "../shared-schemas/non-empty-string.json",  "required": true  }
+                    }
+              }
+}

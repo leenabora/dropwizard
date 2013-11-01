@@ -11,7 +11,41 @@
                      "required" : true,
                      "additionalItems" : false,
 
-                      "items" : { "$ref": "stock-allocation-per-channel-schema.json", "required" : true }
+                      "items" : {
+                                    "type": "object",
+                                    "required": true,
+                                    "additionalProperties": false,
+                                    "properties": {
+
+                                          "channel" : {
+                                                "type" : "string",
+                                                "required" : true,
+
+                                                "enumeration" : [ "CFA", "CFU","AFU", "AFA" ]
+                                           },
+
+                                 	  "stockAllocation": {
+                                                "type": "array",
+                                                "required": true,
+
+                                                "items": {
+                                                    "type": "object",
+                                                    "additionalProperties": false,
+                                                    "properties": {
+
+                                                           "stockStatus": {
+                                                                "type" : "string",
+                                                                "required" : true,
+
+                                                	        "enumeration" : [  "PreOrder", "BackOrder", "InStock", "DelayedDelivery", "OutOfStock" ]
+                                                            },
+
+                                                           "stockLevel": {  "type" : "integer", "required" : true }
+                                                      }
+                                                 }
+                                           }
+                                    }
+                                }
                 }
       }
 }

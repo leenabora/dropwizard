@@ -1,7 +1,0 @@
-{
-    "type" : "array",
-    "required" : true,
-    "additionalProperties" : false,
-
-    "items" : { "$ref": "deliveryoption-messages-for-stockstatus-schema.json", "required" : true }
-}

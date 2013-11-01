@@ -1,6 +1,8 @@
 package uk.co.o2.stockservice.resources.admin
 
 import uk.co.o2.services.serialization.InputSchema
+import uk.co.o2.stockservice.model.StockAllocation
+import uk.co.o2.stockservice.service.StockService
 
 import javax.ws.rs.*
 import javax.ws.rs.core.MediaType
@@ -15,9 +17,17 @@ import static javax.ws.rs.core.Response.status
 @Produces(APPLICATION_JSON)
 class AdminStockResource {
 
+    private StockService stockService
+
+    AdminStockResource(StockService stockService) {
+        this.stockService = stockService
+    }
+
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public Response allocateStock(@PathParam("sku") String sku, @InputSchema("admin_schemas/stock-allocation-schema.json") Map map) {
+        StockAllocation stockAllocation=new  StockAllocation(sku:sku, stockStatus: "PreOrder", stockLevel: 1000)
+        stockService.allocateStock(stockAllocation)
         status(CREATED).type(APPLICATION_JSON).entity("{'message': 'successfully allocated the stock'}").build()
     }
 

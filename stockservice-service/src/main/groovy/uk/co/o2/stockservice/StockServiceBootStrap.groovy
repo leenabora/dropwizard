@@ -7,10 +7,12 @@ import com.yammer.dropwizard.config.Bootstrap
 import com.yammer.dropwizard.config.Environment
 import uk.co.o2.json.schema.SchemaPassThroughCache
 import uk.co.o2.services.serialization.JacksonJsonSchemaValidatingProvider
+import uk.co.o2.stockservice.configuration.DependencyInjector
 import uk.co.o2.stockservice.configuration.PropertyConfigurator
 import uk.co.o2.stockservice.resources.StockResource
-import uk.co.o2.stockservice.resources.admin.AdminDeliveryOptionsResource
+import uk.co.o2.stockservice.resources.admin.AdminStockMetadataResource
 import uk.co.o2.stockservice.resources.admin.AdminStockResource
+import uk.co.o2.stockservice.service.StockService
 
 class StockServiceBootStrap extends Service<StockServiceConfiguration> {
     public static void main(String[] args) throws Exception {
@@ -31,6 +33,7 @@ class StockServiceBootStrap extends Service<StockServiceConfiguration> {
         registerProvider(environment)
 
         registerResources(environment)
+
     }
 
     private void loadConfigurations(StockServiceConfiguration configuration) {
@@ -48,9 +51,12 @@ class StockServiceBootStrap extends Service<StockServiceConfiguration> {
     }
 
     private void registerResources(Environment environment) {
-        environment.addResource(new StockResource());
-        environment.addResource(new AdminStockResource());
-        environment.addResource(new AdminDeliveryOptionsResource());
+        DependencyInjector dependencyInjector = new DependencyInjector()
+        StockService stockService = dependencyInjector.inject()
+
+        environment.addResource(new StockResource(stockService))
+        environment.addResource(new AdminStockResource(stockService))
+        environment.addResource(new AdminStockMetadataResource(stockService))
     }
 
 }
