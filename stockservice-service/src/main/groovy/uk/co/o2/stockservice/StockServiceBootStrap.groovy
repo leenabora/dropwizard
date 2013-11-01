@@ -30,9 +30,11 @@ class StockServiceBootStrap extends Service<StockServiceConfiguration> {
 
         loadConfigurations(configuration)
 
-        registerProvider(environment)
+        ObjectMapper mapper = new ObjectMapper()
 
-        registerResources(environment)
+        registerProvider(environment, mapper)
+
+        registerResources(environment, mapper)
 
     }
 
@@ -40,8 +42,7 @@ class StockServiceBootStrap extends Service<StockServiceConfiguration> {
         PropertyConfigurator.loadConfiguration(configuration.externalConfigurationFileLocation)
     }
 
-    private void registerProvider(Environment environment) {
-        ObjectMapper mapper = new ObjectMapper()
+    private void registerProvider(Environment environment, ObjectMapper mapper) {
         JsonFactory jsonFactory = new JsonFactory(mapper)
         def passThroughCache = new SchemaPassThroughCache(jsonFactory)
 
@@ -50,13 +51,13 @@ class StockServiceBootStrap extends Service<StockServiceConfiguration> {
         environment.addProvider(validationProvider)
     }
 
-    private void registerResources(Environment environment) {
+    private void registerResources(Environment environment, ObjectMapper mapper) {
         DependencyInjector dependencyInjector = new DependencyInjector()
         StockService stockService = dependencyInjector.inject()
 
         environment.addResource(new StockResource(stockService))
-        environment.addResource(new AdminStockResource(stockService))
-        environment.addResource(new AdminStockMetadataResource(stockService))
+        environment.addResource(new AdminStockResource(stockService, mapper))
+        environment.addResource(new AdminStockMetadataResource(stockService, mapper))
     }
 
 }
