@@ -13,38 +13,23 @@ class PropertyConfigurator {
 
     private static Properties properties = new Properties()
 
-    static {
-        properties = loadConfiguration()
-    }
-
     public String getValue(String configKey) {
         properties.getProperty(configKey)
     }
 
 
-    private static Properties loadConfiguration() {
-        Properties localProperties = new Properties()
+    public static Properties loadConfiguration(String externalPropertyFilePath) {
+        Properties localProperties = loadProperties("config/local.properties")
+        Properties externalProperties = loadExternalProperties(externalPropertyFilePath)
 
-        URL internalConfigurationLocation = Resources.getResource("config/local.properties")
-        def externalPropertyFilePath = "${System.getProperty('catalina.base')}/appdata/stockService.properties"
-        File externalConfiguration = new File(externalPropertyFilePath)
-
-        InputSupplier<InputStream> inputSupplier = Resources
-                .newInputStreamSupplier(internalConfigurationLocation);
-
-        localProperties.load(inputSupplier.getInput());
-
-        Properties externalProperties = new Properties()
-
-        if (externalConfiguration.exists()) {
-            externalProperties.load(new FileSystemResource(externalConfiguration).inputStream)
+        if (externalProperties) {
             localProperties.each {
                 if (externalProperties.getProperty((String) it.key) == null)
                     throw new RuntimeException("External Properties did not contain the mandatory key " + it.key)
             }
             localProperties = externalProperties
         }
-        expandSystemPropertiesReferencedInValues(localProperties)
+        properties = expandSystemPropertiesReferencedInValues(localProperties)
     }
 
     private static Properties expandSystemPropertiesReferencedInValues(Properties properties) {
@@ -61,6 +46,31 @@ class PropertyConfigurator {
             matcher.appendTail(expandedResult)
             it.value = expandedResult.toString()
         }
+    }
+
+    private static Properties loadProperties(String classpathResourceName) {
+        URL internalConfigurationLocation = Resources.getResource(classpathResourceName)
+
+        InputSupplier<InputStream> inputSupplier = Resources
+                .newInputStreamSupplier(internalConfigurationLocation);
+
+        Properties props = new Properties()
+        props.load(inputSupplier.getInput());
+        props
+    }
+
+
+    private static Properties loadExternalProperties(String externalPropertyFilePath) {
+        Properties externalProperties
+
+        if (externalPropertyFilePath) {
+            File externalConfiguration = new File(externalPropertyFilePath)
+            if (externalConfiguration.exists()) {
+                externalProperties = new Properties()
+                externalProperties.load(new FileSystemResource(externalConfiguration).inputStream)
+            }
+        }
+        externalProperties
     }
 
 }

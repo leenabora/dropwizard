@@ -1,3 +1,8 @@
+#App specific options
+
+# configure external property file here
+#externalConfigurationFileLocation: "/home/leena/config.properties"
+
 # HTTP-specific options.
 http:
 
@@ -8,3 +13,8 @@ http:
   rootPath: "/stockService/*"
 
   contextParameters: {}
+
+
+
+
+

@@ -7,9 +7,7 @@ import com.yammer.dropwizard.config.Bootstrap
 import com.yammer.dropwizard.config.Environment
 import uk.co.o2.json.schema.SchemaPassThroughCache
 import uk.co.o2.services.serialization.JacksonJsonSchemaValidatingProvider
-import StockResource
-import AdminDeliveryOptionsResource
-import AdminStockResource
+import uk.co.o2.stockservice.configuration.PropertyConfigurator
 import uk.co.o2.stockservice.resources.StockResource
 import uk.co.o2.stockservice.resources.admin.AdminDeliveryOptionsResource
 import uk.co.o2.stockservice.resources.admin.AdminStockResource
@@ -28,11 +26,15 @@ class StockServiceBootStrap extends Service<StockServiceConfiguration> {
     public void run(StockServiceConfiguration configuration,
                     Environment environment) {
 
-        environment.setJerseyProperty("rootPath","stockService")
+        loadConfigurations(configuration)
 
         registerProvider(environment)
 
         registerResources(environment)
+    }
+
+    private void loadConfigurations(StockServiceConfiguration configuration) {
+        PropertyConfigurator.loadConfiguration(configuration.externalConfigurationFileLocation)
     }
 
     private void registerProvider(Environment environment) {
