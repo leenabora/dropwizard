@@ -4,4 +4,6 @@ gradle fatJar
 
 cd stockservice-service/build/libs
 
-java -jar stockservice-service-fat.jar server
+ymlConfigFile="$HOME/projects/dropwizard/stockService.yml"
+
+java -jar stockservice-service-fat.jar server $ymlConfigFile
