@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory
 import uk.co.o2.stockservice.model.StockAllocation
 
 class StockAllocationRepository {
-    private static final Logger LOG = LoggerFactory.getLogger(StockService)
+    private static final Logger LOG = LoggerFactory.getLogger(StockAllocationRepository)
 
     JacksonDBCollection<StockAllocation, String> stocksAllocationCollection
 
