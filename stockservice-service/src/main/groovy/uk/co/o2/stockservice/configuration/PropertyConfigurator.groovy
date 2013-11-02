@@ -17,9 +17,12 @@ class PropertyConfigurator {
         properties.getProperty(configKey)
     }
 
+    public static Properties getProperties() {
+        properties
+    }
 
     public static Properties loadConfiguration(String externalPropertyFilePath) {
-        Properties localProperties = loadProperties("config/local.properties")
+        Properties localProperties = expandSystemPropertiesReferencedInValues(loadProperties("config/local.properties"))
         Properties externalProperties = loadExternalProperties(externalPropertyFilePath)
 
         if (externalProperties) {

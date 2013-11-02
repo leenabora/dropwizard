@@ -2,6 +2,8 @@ package uk.co.o2.stockservice.resources.admin
 
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import uk.co.o2.services.serialization.InputSchema
 import uk.co.o2.stockservice.model.StockAllocation
 import uk.co.o2.stockservice.model.StockMetadata
@@ -20,6 +22,8 @@ import static javax.ws.rs.core.Response.status
 @Path("/admin/stockMetadata/")
 @Produces(APPLICATION_JSON)
 class AdminStockMetadataResource {
+
+    private static final Logger LOG = LoggerFactory.getLogger(AdminStockMetadataResource)
 
     private StockService stockService
     private ObjectMapper mapper

@@ -1,6 +1,7 @@
 package uk.co.o2.stockservice.resources
 
-import uk.co.o2.stockservice.model.StockAllocation
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import uk.co.o2.stockservice.model.StockSummary
 import uk.co.o2.stockservice.service.StockService
 
@@ -16,6 +17,8 @@ import static javax.ws.rs.core.Response.status
 @Produces(APPLICATION_JSON)
 class StockResource {
 
+    private static final Logger LOG = LoggerFactory.getLogger(StockResource)
+
     private StockService stockService
 
     StockResource(StockService stockService) {
@@ -24,7 +27,8 @@ class StockResource {
 
     @GET
     public Response getStockSummary(@PathParam("sku") String sku, @QueryParam("channel") String channel) {
-        println("sku " + sku)
+        LOG.info("sku " + sku)
+
         StockSummary stockSummary = stockService.getStockSummary(sku, channel)
         if (stockSummary) {
             status(OK).type(APPLICATION_JSON).entity(stockSummary).build()

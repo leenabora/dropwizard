@@ -1,0 +1,27 @@
+<configuration>
+    <appender name="opslog" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${log.directory}/stock_service_ops.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${log.directory}/stock_service_ops-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>500MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+        <encoder class="ch.qos.logback.core.encoder.LayoutWrappingEncoder">
+            <layout class="ch.qos.logback.classic.PatternLayout">
+                <pattern>%date{yyyy-MM-dd'T'HH:mm:ss.SSSZ} %-5level %X{touchPointRequestId} - %msg%n</pattern>
+                <fileHeader>timestamp request-id error-code error-message</fileHeader>
+            </layout>
+            <charset>UTF8</charset>
+        </encoder>
+    </appender>
+
+
+    <root level="info">
+        <appender-ref ref="opslog"/>
+    </root>
+
+    <logger name="uk.co.o2" level="all" additivity="false">
+        <appender-ref ref="opslog"/>
+    </logger>
+</configuration>

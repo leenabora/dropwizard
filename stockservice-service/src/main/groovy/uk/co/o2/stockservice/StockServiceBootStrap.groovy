@@ -6,6 +6,7 @@ import com.yammer.dropwizard.Service
 import com.yammer.dropwizard.config.Bootstrap
 import com.yammer.dropwizard.config.Environment
 import uk.co.o2.json.schema.SchemaPassThroughCache
+import uk.co.o2.services.logger.LogbackFactory
 import uk.co.o2.services.serialization.JacksonJsonSchemaValidatingProvider
 import uk.co.o2.stockservice.configuration.DependencyInjector
 import uk.co.o2.stockservice.configuration.PropertyConfigurator
@@ -40,6 +41,8 @@ class StockServiceBootStrap extends Service<StockServiceConfiguration> {
 
     private void loadConfigurations(StockServiceConfiguration configuration) {
         PropertyConfigurator.loadConfiguration(configuration.externalConfigurationFileLocation)
+
+        LogbackFactory.configureLogging(PropertyConfigurator.getProperties(),"/logback_stockservice.xml")
     }
 
     private void registerProvider(Environment environment, ObjectMapper mapper) {

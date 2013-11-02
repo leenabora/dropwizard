@@ -3,10 +3,13 @@ package uk.co.o2.stockservice.repository
 import org.mongojack.DBCursor
 import org.mongojack.JacksonDBCollection
 import org.mongojack.WriteResult
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import uk.co.o2.stockservice.model.StockStatus
 import uk.co.o2.stockservice.model.StockMetadata
 
 class StockMetadataRepository {
+    private static final Logger LOG = LoggerFactory.getLogger(StockMetadataRepository)
 
     JacksonDBCollection<StockMetadata, String> stockMetadataCollection
 
