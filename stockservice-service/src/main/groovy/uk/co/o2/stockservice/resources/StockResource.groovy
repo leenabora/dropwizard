@@ -26,7 +26,7 @@ class StockResource {
     }
 
     @GET
-    public Response getStockSummary(@PathParam("sku") String sku, @QueryParam("channel") String channel) {
+    public Response getStockSummary(@PathParam("sku") String sku, @HeaderParam("X-Channel") String channel) {
         LOG.info("sku " + sku)
 
         StockSummary stockSummary = stockService.getStockSummary(sku, channel)
@@ -40,13 +40,13 @@ class StockResource {
 
     @PUT
     @Path("/reserve")
-    public Response reserveStock(@PathParam("sku") String sku, @QueryParam("channel") String channel) {
+    public Response reserveStock(@PathParam("sku") String sku, @HeaderParam("X-Channel") String channel) {
         status(OK).type(APPLICATION_JSON).entity("{'stockReservationToken': '100329482385483'}").build()
     }
 
     @PUT
     @Path("/release")
-    public Response releaseStock(@PathParam("sku") String sku, @QueryParam("stockReservationToken") String stockReservationToken) {
+    public Response releaseStock(@PathParam("sku") String sku, @QueryParam("stockReservationToken") String stockReservationToken, @HeaderParam("X-Channel") String channel) {
         status(OK).type(APPLICATION_JSON).entity("{'message': 'successfully released the stock'}").build()
     }
 
