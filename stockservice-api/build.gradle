@@ -11,7 +11,10 @@ dependencies {
     compile dropWizard, jbossLogging, jerseyClient
 
     compile servicesCommon, servicesTestCommon, servicesSchemasCommon
+
+    compile gmock
 }
+
 
 
 compileJava.options.encoding = "ASCII"

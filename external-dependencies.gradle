@@ -17,4 +17,5 @@ ext {
 
     mongoJack = 'org.mongojack:mongojack:2.0.0-RC5'
 
+    gmock = [group: 'org.gmock', name: 'gmock', version: '0.8.2', transitive: false]
 }

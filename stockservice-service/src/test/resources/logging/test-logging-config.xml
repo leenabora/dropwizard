@@ -1,0 +1,14 @@
+<configuration>
+    <appender name="testAppender" class="ch.qos.logback.core.read.ListAppender">
+        <encoder class="ch.qos.logback.core.encoder.LayoutWrappingEncoder">
+            <layout class="ch.qos.logback.classic.PatternLayout">
+                <pattern>%msg%n</pattern>
+            </layout>
+            <charset>UTF8</charset>
+        </encoder>
+    </appender>
+
+    <root level="all">
+        <appender-ref ref="testAppender"/>
+    </root>
+</configuration>

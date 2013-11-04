@@ -1,6 +1,6 @@
 #!/bin/bash -e
 
-gradle fatJar
+gradle clean build fatJar
 
 cd stockservice-service/build/libs
 

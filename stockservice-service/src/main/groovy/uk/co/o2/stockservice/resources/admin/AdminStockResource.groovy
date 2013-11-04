@@ -36,7 +36,7 @@ class AdminStockResource {
 //        JsonNode jsonNode = mapper.readTree(map)
 //        StockAllocation stockAllocation = (StockAllocation) mapper.readValue(map, StockAllocation.class)
 
-        JsonNode stockAllocation = new StockAllocation(sku: sku, stockStatus: "PreOrder", stockLevel: 1000)
+        StockAllocation stockAllocation = new StockAllocation(sku: sku, stockStatus: "PreOrder", stockLevel: 1000)
         stockService.allocateStock(stockAllocation)
         status(CREATED).type(APPLICATION_JSON).entity("{'message': 'successfully allocated the stock'}").build()
     }
